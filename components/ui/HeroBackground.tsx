@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import NextImage from 'next/image';
 
 class Particle {
     x: number;
@@ -114,6 +115,17 @@ export default function HeroBackground() {
         <div className="absolute inset-0 z-0 bg-primary">
             {/* Deep Navy Gradient Base - Stitch Style */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#061037] via-[#0a1a5c] to-[#040b29]" />
+
+            {/* Background Image Layer */}
+            <div className="absolute inset-0 opacity-30 mix-blend-overlay">
+                <NextImage
+                    src="/assets/hero-home.png"
+                    alt="Legal Wellness Background"
+                    fill
+                    className="object-cover"
+                    priority
+                />
+            </div>
 
             {/* Canvas Layer */}
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-60" />

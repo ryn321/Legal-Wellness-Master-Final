@@ -1,9 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Scale, Users, Shield, BookOpen, Briefcase, Home } from 'lucide-react';
+import { Shield, Scale, Users, BookOpen, Home, Briefcase } from 'lucide-react';
+import Link from 'next/link';
 import { StitchCard } from '@/components/ui/StitchCard';
-import HeroBackground from '@/components/ui/HeroBackground';
+import ThreeHero from '@/components/ui/ThreeHero';
 
 export default function HomePage() {
   const services = [
@@ -50,7 +51,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
         {/* Background Video Placeholder - Replaced with Stitch Programmatic Loop */}
-        <HeroBackground />
+        <ThreeHero />
 
         {/* Hero Content */}
         <div className="relative z-20 container mx-auto px-6 text-center space-y-8">
@@ -81,9 +82,9 @@ export default function HomePage() {
             <a href="/contact" className="px-8 py-4 bg-gradient-to-r from-accent to-yellow-600 text-white font-bold rounded-full hover:shadow-[0_0_20px_rgba(212,175,55,0.5)] transition-all duration-300 transform hover:scale-105 uppercase tracking-wide text-sm">
               Schedule a Consultation
             </a>
-            <a href="/services" className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-full hover:bg-white/10 transition-all duration-300 backdrop-blur-sm uppercase tracking-wide text-sm">
+            <Link href="/services" className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-full hover:bg-white/10 transition-all duration-300 backdrop-blur-sm uppercase tracking-wide text-sm">
               Explore Services
-            </a>
+            </Link>
           </motion.div>
         </div>
 

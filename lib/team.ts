@@ -1,23 +1,16 @@
 export const team = [
     {
-        name: 'Adv. Sarah Sterling',
-        role: 'Senior Partner',
-        specialty: 'Corporate & Commercial Law',
-        bio: 'With over 20 years of experience in high-stakes corporate litigation, Sarah brings an authoritative yet empathetic approach to complex commercial disputes.',
-        image: '/assets/team/sarah.jpg' // Placeholder
+        name: 'Werner Bornman',
+        role: 'Director',
+        specialty: 'Commercial & Corporate Law',
+        bio: 'Werner holds a B.Comm and LLB from the University of Stellenbosch and Pretoria. He specializes in strategic leadership and commercially-minded business solutions.',
+        image: '/assets/team/werner.jpg' // Placeholder
     },
     {
-        name: 'Michael Vance',
-        role: 'Head of Litigation',
-        specialty: 'MVA & Medical Negligence',
-        bio: 'Michael has secured record-breaking settlements for his clients. His relentless pursuit of justice makes him a formidable ally in the courtroom.',
-        image: '/assets/team/michael.jpg' // Placeholder
-    },
-    {
-        name: 'Elena Gold',
-        role: 'Estate Specialist',
-        specialty: 'Trusts & Deceased Estates',
-        bio: 'Elena handles sensitive family matters with dignity and precision, ensuring that legacies are preserved and estates are wound up efficiently.',
-        image: '/assets/team/elena.jpg' // Placeholder
+        name: 'Ilse Marlow',
+        role: 'Director',
+        specialty: 'Consumer Protection & Property',
+        bio: 'Ilse holds a BLC LLB and a Masters in Consumer Protection. She is a Master Real Estate Practitioner and an admitted attorney and notary.',
+        image: '/assets/team/ilse.jpg' // Placeholder
     }
 ];

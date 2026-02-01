@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Target, Heart, Award } from 'lucide-react';
 import { StitchCard } from '@/components/ui/StitchCard';
+import PageHero from '@/components/ui/PageHero';
 import { team } from '@/lib/team';
 
 export default function AboutPage() {
@@ -26,46 +27,31 @@ export default function AboutPage() {
 
     return (
         <div className="pb-20">
-            {/* Header */}
-            <section className="relative py-20 md:py-32 overflow-hidden bg-primary-light/30 border-b border-white/5">
-                <div className="container mx-auto px-6 text-center relative z-10">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="text-4xl md:text-6xl font-bold text-white mb-6"
-                    >
-                        About Legal <span className="text-accent">Wellness</span>
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="text-xl text-gray-300 max-w-3xl mx-auto"
-                    >
-                        Dignity. Integrity. Excellence. We are more than just a law firm; we are your partners in navigating life&apos;s legal complexities.
-                    </motion.p>
-                </div>
-            </section>
+            <PageHero
+                title="About Legal Wellness"
+                subtitle="Dignity. Integrity. Excellence. We are more than just a law firm; we are your partners in navigating life's legal complexities."
+                backgroundImage="/assets/hero-about.png"
+            />
 
             {/* Mission */}
             <section className="container mx-auto px-6 py-20">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
+                        className="h-full"
                     >
-                        <div className="relative">
+                        <div className="relative h-full">
                             <div className="absolute inset-0 bg-accent blur-3xl opacity-20" />
-                            <div className="relative bg-white/5 border border-white/10 rounded-2xl p-10 backdrop-blur-sm">
+                            <div className="relative bg-white/5 border border-white/10 rounded-2xl p-10 backdrop-blur-sm h-full flex flex-col justify-center">
                                 <h2 className="text-3xl font-bold text-white mb-6">Our Mission</h2>
                                 <p className="text-gray-300 leading-relaxed mb-6">
-                                    At Legal Wellness, our mission is to provide accessible, high-quality legal services that empower individuals and businesses. We believe that legal support should not just be a service, but a pathway to peace of mind and stability.
+                                    Legal Wellness is a product of <strong className="text-accent">Bornman Marlow Inc. Attorneys</strong>, distributed by <strong className="text-accent">Finwell Legal Services</strong>. Our mission is to provide accessible, high-quality legal services that empower South Africans who would otherwise find it financially impossible to employ a lawyer.
                                 </p>
                                 <p className="text-gray-300 leading-relaxed">
-                                    We combine deep legal expertise with a compassionate approach, ensuring that every client feels heard, understood, and championed.
+                                    We combine the deep legal expertise of a Pretoria-based firm with a compassionate approach, ensuring that every member has unlimited access to professional legal advice on any topic of law.
                                 </p>
                             </div>
                         </div>
@@ -94,7 +80,7 @@ export default function AboutPage() {
             <section className="container mx-auto px-6 text-center">
                 <h2 className="text-3xl font-bold text-white mb-12">Our Specialists</h2>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="flex flex-wrap justify-center gap-8">
                     {team.map((member, idx) => (
                         <motion.div
                             key={member.name}

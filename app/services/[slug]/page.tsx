@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { StitchCard } from '@/components/ui/StitchCard';
 
 // Generate static params for all services
 export function generateStaticParams() {

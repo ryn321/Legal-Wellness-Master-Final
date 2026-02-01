@@ -21,6 +21,8 @@ const Footer = () => {
                         <li><Link href="/" className="hover:text-accent transition-colors">Home</Link></li>
                         <li><Link href="/about" className="hover:text-accent transition-colors">About Us</Link></li>
                         <li><Link href="/services" className="hover:text-accent transition-colors">Services</Link></li>
+                        <li><Link href="/membership" className="hover:text-accent transition-colors">Membership</Link></li>
+                        <li><Link href="/news" className="hover:text-accent transition-colors">Insights</Link></li>
                         <li><Link href="/contact" className="hover:text-accent transition-colors">Contact</Link></li>
                     </ul>
                 </div>
@@ -41,11 +43,11 @@ const Footer = () => {
                 <div>
                     <h3 className="text-white font-bold mb-4 uppercase tracking-wider text-sm">Contact Us</h3>
                     <address className="not-italic text-sm space-y-2">
-                        <p>123 Legal Avenue</p>
-                        <p>Sandton, Johannesburg</p>
-                        <p>South Africa</p>
-                        <p className="pt-2"><a href="tel:+27110000000" className="hover:text-accent transition-colors">+27 11 000 0000</a></p>
-                        <p><a href="mailto:info@legalwellness.co.za" className="hover:text-accent transition-colors">info@legalwellness.co.za</a></p>
+                        <p>Block B, 300 Middel & Veale Street</p>
+                        <p>Nieuw Muckleneuk</p>
+                        <p>Pretoria, 0181</p>
+                        <p className="pt-2"><a href="tel:0120545285" className="hover:text-accent transition-colors">012 054 5285</a></p>
+                        <p><a href="mailto:client@legalwellness.co.za" className="hover:text-accent transition-colors">client@legalwellness.co.za</a></p>
                     </address>
                 </div>
             </div>
