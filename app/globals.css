@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --background: #061037;
+  /* Stitch Navy */
+  --foreground: #ffffff;
+
+  --primary: #061037;
+  --primary-light: #18255A;
+  --accent: #D4AF37;
+  /* Electric Gold */
+  --accent-hover: #B5952F;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
