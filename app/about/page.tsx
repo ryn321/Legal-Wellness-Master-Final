@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Target, Heart, Award } from 'lucide-react';
 import { StitchCard } from '@/components/ui/StitchCard';
+import { team } from '@/lib/team';
 
 export default function AboutPage() {
     const values = [
@@ -42,7 +43,7 @@ export default function AboutPage() {
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="text-xl text-gray-300 max-w-3xl mx-auto"
                     >
-                        Dignity. Integrity. Excellence. We are more than just a law firm; we are your partners in navigating life's legal complexities.
+                        Dignity. Integrity. Excellence. We are more than just a law firm; we are your partners in navigating life&apos;s legal complexities.
                     </motion.p>
                 </div>
             </section>
@@ -89,10 +90,35 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* Team Content could go here */}
+            {/* Team Content */}
             <section className="container mx-auto px-6 text-center">
                 <h2 className="text-3xl font-bold text-white mb-12">Our Specialists</h2>
-                <p className="text-gray-400">Team section placeholder - Content to be provided.</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {team.map((member, idx) => (
+                        <motion.div
+                            key={member.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: idx * 0.1 }}
+                            className="group"
+                        >
+                            {/* Avatar Placeholder */}
+                            <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-accent to-yellow-600 p-1 mb-6 group-hover:scale-105 transition-transform duration-300">
+                                <div className="w-full h-full rounded-full bg-primary-light flex items-center justify-center overflow-hidden border-2 border-primary">
+                                    <span className="text-4xl font-bold text-white/20">{member.name.charAt(0)}</span>
+                                </div>
+                            </div>
+
+                            <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
+                            <p className="text-accent text-sm font-bold uppercase tracking-wider mb-4">{member.role}</p>
+                            <p className="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto">
+                                {member.bio}
+                            </p>
+                        </motion.div>
+                    ))}
+                </div>
             </section>
         </div>
     );

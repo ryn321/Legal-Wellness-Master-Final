@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Scale, Users, Shield, BookOpen, Briefcase, Home } from 'lucide-react';
 import { StitchCard } from '@/components/ui/StitchCard';
+import HeroBackground from '@/components/ui/HeroBackground';
 
 export default function HomePage() {
   const services = [
@@ -33,7 +34,7 @@ export default function HomePage() {
     {
       title: 'Commercial Law',
       description: 'Comprehensive legal solutions for businesses, contracts, and corporate governance.',
-      icon: Briefcase, // Better icon for Commercial
+      icon: Briefcase,
       href: '/services/commercial',
     },
     {
@@ -48,15 +49,8 @@ export default function HomePage() {
     <div className="flex flex-col gap-20 pb-20">
       {/* Hero Section */}
       <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
-        {/* Background Video Placeholder */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-primary/80 z-10" />
-          {/* 
-                NOTE: Ideally replace with an actual <video> tag if asset is available.
-                For now, using a gradient placeholder as per plan if video missing or until verification.
-            */}
-          <div className="w-full h-full bg-gradient-to-br from-primary via-primary-light to-primary" />
-        </div>
+        {/* Background Video Placeholder - Replaced with Stitch Programmatic Loop */}
+        <HeroBackground />
 
         {/* Hero Content */}
         <div className="relative z-20 container mx-auto px-6 text-center space-y-8">
