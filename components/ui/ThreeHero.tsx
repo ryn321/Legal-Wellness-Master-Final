@@ -1,16 +1,22 @@
-import React, { useRef, useMemo } from 'react';
+'use client';
+
+import React, { useRef, useMemo, memo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial, Float } from '@react-three/drei';
-// @ts-ignore
+// @ts-expect-error - maath does not have types
 import * as random from 'maath/random/dist/maath-random.esm';
 import Image from 'next/image';
+import { useInView } from 'framer-motion';
+import * as THREE from 'three';
 
-function GoldenParticles(props: any) {
-    const ref = useRef<any>();
+function GoldenParticles(props: Record<string, unknown>) {
+    const ref = useRef<THREE.Points>(null);
+    // Memoize the sphere positions to avoid recalculation on every render
     const sphere = useMemo(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }), []);
 
     useFrame((state, delta) => {
         if (ref.current) {
+            // Update rotation directly on the THREE object for performance
             ref.current.rotation.x -= delta / 20;
             ref.current.rotation.y -= delta / 30;
         }
@@ -31,21 +37,13 @@ function GoldenParticles(props: any) {
     );
 }
 
-function Connections() {
-    // Abstract geometric lines to represent "law connections"
-    return (
-        <group>
-            {/* Creating a few floating geometric shapes/lines could go here, 
-                 but keeping it simple with particles + background first to ensure performance 
-                 and clean aesthetic matching the hero image. */}
-        </group>
-    )
-}
+const ThreeHero = memo(function ThreeHero() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    // Optimization: Track visibility to pause the animation when not in view
+    const isInView = useInView(containerRef);
 
-
-export default function ThreeHero() {
     return (
-        <div className="absolute inset-0 z-0 bg-primary">
+        <div ref={containerRef} className="absolute inset-0 z-0 bg-primary">
             {/* Background Image Layer - Preserving the user's approved image */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#061037] via-[#0a1a5c] to-[#040b29]" />
@@ -61,7 +59,23 @@ export default function ThreeHero() {
             </div>
 
             <div className="absolute inset-0 z-10 w-full h-full opacity-80">
-                <Canvas camera={{ position: [0, 0, 1] }}>
+                <Canvas
+                    camera={{ position: [0, 0, 1] }}
+                    // PERFORMANCE OPTIMIZATIONS:
+                    // 1. Limit DPR to [1, 2] to avoid excessive rendering on high-DPI screens
+                    dpr={[1, 2]}
+                    // 2. Disable antialiasing for performance (minimal impact on particles)
+                    // 3. Hint for high-performance GPU
+                    gl={{
+                        antialias: false,
+                        powerPreference: "high-performance",
+                        alpha: true
+                    }}
+                    // 4. Pause the rendering loop when the component is not in view
+                    frameloop={isInView ? 'always' : 'never'}
+                    // 5. Allow scaling down quality under heavy load
+                    performance={{ min: 0.5 }}
+                >
                     <Float speed={1} rotationIntensity={0.5} floatIntensity={0.5}>
                         <GoldenParticles />
                     </Float>
@@ -72,4 +86,6 @@ export default function ThreeHero() {
             <div className="absolute inset-0 z-20 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(6,16,55,0.6)_100%)] pointer-events-none" />
         </div>
     );
-}
+});
+
+export default ThreeHero;
