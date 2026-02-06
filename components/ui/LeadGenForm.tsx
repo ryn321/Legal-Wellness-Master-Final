@@ -1,9 +1,21 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, CheckCircle, Send } from 'lucide-react';
+import { Shield, CheckCircle, Send, Loader2 } from 'lucide-react';
 
 export default function LeadGenForm() {
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('submitting');
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        setStatus('success');
+        // Reset after 3 seconds
+        setTimeout(() => setStatus('idle'), 3000);
+    };
     return (
         <section className="relative py-20 overflow-hidden">
             {/* Background with Gradient */}
@@ -41,7 +53,7 @@ export default function LeadGenForm() {
                                     'Professional Attorneys'
                                 ].map((feature) => (
                                     <div key={feature} className="flex items-center gap-2 text-gray-300">
-                                        <CheckCircle className="w-5 h-5 text-accent" />
+                                        <CheckCircle className="w-5 h-5 text-accent" aria-hidden="true" />
                                         <span>{feature}</span>
                                     </div>
                                 ))}
@@ -58,37 +70,43 @@ export default function LeadGenForm() {
                         className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 shadow-2xl"
                     >
                         <div className="flex items-center gap-3 mb-6">
-                            <Shield className="w-8 h-8 text-accent" />
+                            <Shield className="w-8 h-8 text-accent" aria-hidden="true" />
                             <h3 className="text-2xl font-bold text-white">Get Legal Protection</h3>
                         </div>
                         <p className="text-gray-300 text-sm mb-8">
                             Fill in your details and an advisor will contact you shortly.
                         </p>
 
-                        <form className="space-y-4">
+                        <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-400 uppercase">Full Name</label>
-                                <input type="text" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="John Doe" />
+                                <label htmlFor="name" className="text-xs font-bold text-gray-400 uppercase">Full Name</label>
+                                <input id="name" type="text" required aria-required="true" autoComplete="name" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="John Doe" />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Email</label>
-                                    <input type="email" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="john@example.com" />
+                                    <label htmlFor="email" className="text-xs font-bold text-gray-400 uppercase">Email</label>
+                                    <input id="email" type="email" required aria-required="true" autoComplete="email" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="john@example.com" />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Phone</label>
-                                    <input type="tel" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="082 123 4567" />
+                                    <label htmlFor="phone" className="text-xs font-bold text-gray-400 uppercase">Phone</label>
+                                    <input id="phone" type="tel" required aria-required="true" autoComplete="tel" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="082 123 4567" />
                                 </div>
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-400 uppercase">How can we help?</label>
-                                <textarea className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" rows={3} placeholder="I need help with..." />
+                                <label htmlFor="help" className="text-xs font-bold text-gray-400 uppercase">How can we help?</label>
+                                <textarea id="help" required aria-required="true" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" rows={3} placeholder="I need help with..." />
                             </div>
 
-                            <button type="button" className="w-full bg-accent hover:bg-yellow-500 text-primary font-bold py-4 rounded-lg shadow-lg hover:shadow-accent/20 transition-all duration-300 flex items-center justify-center gap-2 mt-4">
-                                Get Covered Now <Send className="w-4 h-4" />
+                            <button
+                                type="submit"
+                                disabled={status !== 'idle'}
+                                className="w-full bg-accent hover:bg-yellow-500 disabled:opacity-70 disabled:cursor-not-allowed text-primary font-bold py-4 rounded-lg shadow-lg hover:shadow-accent/20 transition-all duration-300 flex items-center justify-center gap-2 mt-4 cursor-pointer"
+                            >
+                                {status === 'idle' && <>Get Covered Now <Send className="w-4 h-4" aria-hidden="true" /></>}
+                                {status === 'submitting' && <>Sending... <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /></>}
+                                {status === 'success' && <>Message Sent! <CheckCircle className="w-4 h-4" aria-hidden="true" /></>}
                             </button>
                         </form>
                     </motion.div>
