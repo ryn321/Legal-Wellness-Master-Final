@@ -1,12 +1,14 @@
 import React, { useRef, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial, Float } from '@react-three/drei';
-// @ts-ignore
+// @ts-expect-error - maath/random doesn't have types
 import * as random from 'maath/random/dist/maath-random.esm';
 import Image from 'next/image';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function GoldenParticles(props: any) {
-    const ref = useRef<any>();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ref = useRef<any>(null);
     const sphere = useMemo(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }), []);
 
     useFrame((state, delta) => {
@@ -31,16 +33,6 @@ function GoldenParticles(props: any) {
     );
 }
 
-function Connections() {
-    // Abstract geometric lines to represent "law connections"
-    return (
-        <group>
-            {/* Creating a few floating geometric shapes/lines could go here, 
-                 but keeping it simple with particles + background first to ensure performance 
-                 and clean aesthetic matching the hero image. */}
-        </group>
-    )
-}
 
 
 export default function ThreeHero() {
