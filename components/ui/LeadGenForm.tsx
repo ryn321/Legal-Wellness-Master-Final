@@ -1,9 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Shield, CheckCircle, Send } from 'lucide-react';
 
 export default function LeadGenForm() {
+    const [status, setStatus] = useState('idle');
+    const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); setStatus('submitting'); setTimeout(() => setStatus('success'), 1500); };
     return (
         <section className="relative py-20 overflow-hidden">
             {/* Background with Gradient */}
@@ -65,30 +68,27 @@ export default function LeadGenForm() {
                             Fill in your details and an advisor will contact you shortly.
                         </p>
 
-                        <form className="space-y-4">
+                        <form className="space-y-4" onSubmit={handleSubmit}>
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-400 uppercase">Full Name</label>
-                                <input type="text" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="John Doe" />
+                                <label htmlFor="name" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">Full Name</label>
+                                <input id="name" type="text" required className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="John Doe" />
                             </div>
-
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Email</label>
-                                    <input type="email" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="john@example.com" />
+                                    <label htmlFor="email" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">Email</label>
+                                    <input id="email" type="email" required className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="john@example.com" />
                                 </div>
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Phone</label>
-                                    <input type="tel" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="082 123 4567" />
+                                    <label htmlFor="phone" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">Phone</label>
+                                    <input id="phone" type="tel" required className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="082 123 4567" />
                                 </div>
                             </div>
-
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-400 uppercase">How can we help?</label>
-                                <textarea className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" rows={3} placeholder="I need help with..." />
+                                <label htmlFor="msg" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">How can we help?</label>
+                                <textarea id="msg" required className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" rows={3} placeholder="I need help with..." />
                             </div>
-
-                            <button type="button" className="w-full bg-accent hover:bg-yellow-500 text-primary font-bold py-4 rounded-lg shadow-lg hover:shadow-accent/20 transition-all duration-300 flex items-center justify-center gap-2 mt-4">
-                                Get Covered Now <Send className="w-4 h-4" />
+                            <button type="submit" disabled={status !== 'idle'} className="w-full bg-accent hover:bg-yellow-500 disabled:bg-gray-600 text-primary font-bold py-4 rounded-lg shadow-lg transition-all flex items-center justify-center gap-2 mt-4">
+                                {status === 'idle' ? 'Get Covered Now' : status === 'submitting' ? 'Sending...' : 'Request Sent!'} <Send className="w-4 h-4" />
                             </button>
                         </form>
                     </motion.div>
