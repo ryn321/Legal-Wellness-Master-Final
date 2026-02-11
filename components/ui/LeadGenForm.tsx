@@ -96,7 +96,12 @@ export default function LeadGenForm() {
                                             <label htmlFor="msg" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">How can we help?</label>
                                             <textarea id="msg" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors resize-none disabled:opacity-50" rows={3} placeholder="I need help with..." />
                                         </div>
-                                        <button type="submit" disabled={status === 'submitting'} className="w-full bg-accent hover:bg-yellow-500 text-primary font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-70">
+                                        <button
+                                            type="submit"
+                                            disabled={status === 'submitting'}
+                                            aria-label={status === 'submitting' ? "Submitting form" : "Get Covered Now"}
+                                            className="w-full bg-accent hover:bg-yellow-500 text-primary font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-70"
+                                        >
                                             {status === 'submitting' ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Get Covered Now <Send className="w-4 h-4" /></>}
                                         </button>
                                     </motion.div>
