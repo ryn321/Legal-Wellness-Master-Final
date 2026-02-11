@@ -6,7 +6,7 @@ import * as random from 'maath/random/dist/maath-random.esm';
 import Image from 'next/image';
 
 function GoldenParticles(props: any) {
-    const ref = useRef<any>();
+    const ref = useRef<any>(null);
     const sphere = useMemo(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }), []);
 
     useFrame((state, delta) => {
