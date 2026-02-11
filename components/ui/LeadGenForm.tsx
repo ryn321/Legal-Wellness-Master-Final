@@ -1,9 +1,12 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { Shield, CheckCircle, Send } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Shield, CheckCircle, Send, Loader2 } from 'lucide-react';
 
 export default function LeadGenForm() {
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+
     return (
         <section className="relative py-20 overflow-hidden">
             {/* Background with Gradient */}
@@ -65,31 +68,40 @@ export default function LeadGenForm() {
                             Fill in your details and an advisor will contact you shortly.
                         </p>
 
-                        <form className="space-y-4">
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-400 uppercase">Full Name</label>
-                                <input type="text" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="John Doe" />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Email</label>
-                                    <input type="email" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="john@example.com" />
-                                </div>
-                                <div className="space-y-1">
-                                    <label className="text-xs font-bold text-gray-400 uppercase">Phone</label>
-                                    <input type="tel" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="082 123 4567" />
-                                </div>
-                            </div>
-
-                            <div className="space-y-1">
-                                <label className="text-xs font-bold text-gray-400 uppercase">How can we help?</label>
-                                <textarea className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" rows={3} placeholder="I need help with..." />
-                            </div>
-
-                            <button type="button" className="w-full bg-accent hover:bg-yellow-500 text-primary font-bold py-4 rounded-lg shadow-lg hover:shadow-accent/20 transition-all duration-300 flex items-center justify-center gap-2 mt-4">
-                                Get Covered Now <Send className="w-4 h-4" />
-                            </button>
+                        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); setStatus('submitting'); setTimeout(() => setStatus('success'), 1500); }}>
+                            <AnimatePresence mode="wait">
+                                {status === 'success' ? (
+                                    <motion.div key="success" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="py-12 text-center" role="status">
+                                        <CheckCircle className="w-16 h-16 text-accent mx-auto mb-4" />
+                                        <h3 className="text-2xl font-bold text-white mb-2">Thank You!</h3>
+                                        <p className="text-gray-300">We&apos;ll contact you shortly.</p>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div key="form" exit={{ opacity: 0, y: -10 }} className="space-y-4">
+                                        <div className="space-y-1">
+                                            <label htmlFor="name" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">Full Name</label>
+                                            <input id="name" type="text" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors disabled:opacity-50" placeholder="John Doe" />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <label htmlFor="email" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">Email</label>
+                                                <input id="email" type="email" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors disabled:opacity-50" placeholder="john@example.com" />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label htmlFor="phone" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">Phone</label>
+                                                <input id="phone" type="tel" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors disabled:opacity-50" placeholder="082 123 4567" />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <label htmlFor="msg" className="text-xs font-bold text-gray-400 uppercase cursor-pointer">How can we help?</label>
+                                            <textarea id="msg" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors resize-none disabled:opacity-50" rows={3} placeholder="I need help with..." />
+                                        </div>
+                                        <button type="submit" disabled={status === 'submitting'} className="w-full bg-accent hover:bg-yellow-500 text-primary font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-70">
+                                            {status === 'submitting' ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Get Covered Now <Send className="w-4 h-4" /></>}
+                                        </button>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </form>
                     </motion.div>
                 </div>
