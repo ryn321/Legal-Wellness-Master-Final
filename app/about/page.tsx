@@ -48,7 +48,7 @@ export default function AboutPage() {
                             <div className="relative bg-white/5 border border-white/10 rounded-2xl p-10 backdrop-blur-sm h-full flex flex-col justify-center">
                                 <h2 className="text-3xl font-bold text-white mb-6">Our Mission</h2>
                                 <p className="text-gray-300 leading-relaxed mb-6">
-                                    Legal Wellness is a product of <strong className="text-accent">Bornman Marlow Inc. Attorneys</strong>, distributed by <strong className="text-accent">Finwell Legal Services</strong>. Our mission is to provide accessible, high-quality legal services that empower South Africans who would otherwise find it financially impossible to employ a lawyer.
+                                    Legal Wellness is a product of <strong className="text-accent">Bornman Marlow Inc. Attorneys</strong>. Our mission is to provide accessible, high-quality legal services that empower South Africans who would otherwise find it financially impossible to employ a lawyer.
                                 </p>
                                 <p className="text-gray-300 leading-relaxed">
                                     We combine the deep legal expertise of a Pretoria-based firm with a compassionate approach, ensuring that every member has unlimited access to professional legal advice on any topic of law.
