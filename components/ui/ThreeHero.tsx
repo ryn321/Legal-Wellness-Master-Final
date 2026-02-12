@@ -1,12 +1,15 @@
-import React, { useRef, useMemo } from 'react';
+'use client';
+
+import React, { useRef, useMemo, memo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
+import { useInView } from 'framer-motion';
 import { Points, PointMaterial, Float } from '@react-three/drei';
 // @ts-expect-error - maath types may not be fully resolved in this environment
 import * as random from 'maath/random/dist/maath-random.esm';
 import Image from 'next/image';
 import * as THREE from 'three';
 
-function GoldenParticles(props: Record<string, unknown>) {
+const GoldenParticles = memo(function GoldenParticles(props: Record<string, unknown>) {
     const ref = useRef<THREE.Points>(null);
     const sphere = useMemo(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }), []);
 
@@ -30,13 +33,16 @@ function GoldenParticles(props: Record<string, unknown>) {
             </Points>
         </group>
     );
-}
+});
 
 
 
 export default function ThreeHero() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const isInView = useInView(containerRef);
+
     return (
-        <div className="absolute inset-0 z-0 bg-primary">
+        <div ref={containerRef} className="absolute inset-0 z-0 bg-primary">
             {/* Background Image Layer - Preserving the user's approved image */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#061037] via-[#0a1a5c] to-[#040b29]" />
@@ -52,7 +58,12 @@ export default function ThreeHero() {
             </div>
 
             <div className="absolute inset-0 z-10 w-full h-full opacity-80">
-                <Canvas camera={{ position: [0, 0, 1] }}>
+                <Canvas
+                    camera={{ position: [0, 0, 1] }}
+                    // Performance optimization: Cap DPR and pause animation when not in view
+                    dpr={[1, 2]}
+                    frameloop={isInView ? 'always' : 'never'}
+                >
                     <Float speed={1} rotationIntensity={0.5} floatIntensity={0.5}>
                         <GoldenParticles />
                     </Float>
