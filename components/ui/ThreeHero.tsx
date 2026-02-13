@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, memo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial, Float } from '@react-three/drei';
 // @ts-expect-error - maath types may not be fully resolved in this environment
@@ -6,7 +6,11 @@ import * as random from 'maath/random/dist/maath-random.esm';
 import Image from 'next/image';
 import * as THREE from 'three';
 
-function GoldenParticles(props: Record<string, unknown>) {
+/**
+ * Performance: Memoized GoldenParticles to prevent unnecessary re-renders
+ * within the Three.js scene.
+ */
+const GoldenParticles = memo(function GoldenParticles(props: Record<string, unknown>) {
     const ref = useRef<THREE.Points>(null);
     const sphere = useMemo(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }), []);
 
@@ -30,13 +34,35 @@ function GoldenParticles(props: Record<string, unknown>) {
             </Points>
         </group>
     );
-}
-
-
+});
 
 export default function ThreeHero() {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isInView, setIsInView] = useState(false);
+
+    // Performance: Use native IntersectionObserver for light-weight visibility tracking
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsInView(entry.isIntersecting);
+            },
+            { threshold: 0 }
+        );
+
+        const currentTarget = containerRef.current;
+        if (currentTarget) {
+            observer.observe(currentTarget);
+        }
+
+        return () => {
+            if (currentTarget) {
+                observer.unobserve(currentTarget);
+            }
+        };
+    }, []);
+
     return (
-        <div className="absolute inset-0 z-0 bg-primary">
+        <div ref={containerRef} className="absolute inset-0 z-0 bg-primary">
             {/* Background Image Layer - Preserving the user's approved image */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#061037] via-[#0a1a5c] to-[#040b29]" />
@@ -52,7 +78,13 @@ export default function ThreeHero() {
             </div>
 
             <div className="absolute inset-0 z-10 w-full h-full opacity-80">
-                <Canvas camera={{ position: [0, 0, 1] }}>
+                <Canvas
+                    camera={{ position: [0, 0, 1] }}
+                    // Performance: Cap pixel ratio for high-DPI screens to reduce GPU load
+                    dpr={[1, 2]}
+                    // Performance: Stop render loop when section is off-screen
+                    frameloop={isInView ? 'always' : 'never'}
+                >
                     <Float speed={1} rotationIntensity={0.5} floatIntensity={0.5}>
                         <GoldenParticles />
                     </Float>
