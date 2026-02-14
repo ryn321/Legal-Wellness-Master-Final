@@ -47,6 +47,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
             {/* Article Content */}
             <div className="container mx-auto px-6 max-w-4xl py-12">
+                {/* 🛡️ Sentinel: dangerouslySetInnerHTML is used here.
+                    Currently data is from local lib/news.ts, but if this moves
+                    to a dynamic source, MUST implement sanitization (e.g. dompurify). */}
                 <div
                     className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-gray-300 prose-a:text-accent prose-strong:text-white"
                     dangerouslySetInnerHTML={{ __html: article.content }}
