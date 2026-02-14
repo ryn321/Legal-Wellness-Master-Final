@@ -6,46 +6,47 @@ import Link from 'next/link';
 import { StitchCard } from '@/components/ui/StitchCard';
 import ThreeHero from '@/components/ui/ThreeHero';
 
-export default function HomePage() {
-  const services = [
-    {
-      title: 'Consumer Matters',
-      description: 'Expert guidance on consumer rights, credit disputes, and fair trading practices.',
-      icon: Users,
-      href: '/services/consumer-matters',
-    },
-    {
-      title: 'MVA Claims',
-      description: 'Specialized assistance with Road Accident Fund claims and motor vehicle accident recovery.',
-      icon: Shield,
-      href: '/services/mva',
-    },
-    {
-      title: 'Deceased Estates',
-      description: 'Compassionate and efficient winding up of estates and trust administration.',
-      icon: BookOpen,
-      href: '/services/estates',
-    },
-    {
-      title: 'Property Law',
-      description: 'Conveyancing, property transfers, and lease agreement management.',
-      icon: Home,
-      href: '/services/property',
-    },
-    {
-      title: 'Commercial Law',
-      description: 'Comprehensive legal solutions for businesses, contracts, and corporate governance.',
-      icon: Briefcase,
-      href: '/services/commercial',
-    },
-    {
-      title: 'Medical Negligence',
-      description: 'Fighting for justice in cases of medical malpractice and professional negligence.',
-      icon: Scale,
-      href: '/services/medical-negligence',
-    },
-  ];
+// Static services data moved outside the component to prevent re-allocation on every render
+const SERVICES = [
+  {
+    title: 'Consumer Matters',
+    description: 'Expert guidance on consumer rights, credit disputes, and fair trading practices.',
+    icon: Users,
+    href: '/services/consumer-matters',
+  },
+  {
+    title: 'MVA Claims',
+    description: 'Specialized assistance with Road Accident Fund claims and motor vehicle accident recovery.',
+    icon: Shield,
+    href: '/services/mva',
+  },
+  {
+    title: 'Deceased Estates',
+    description: 'Compassionate and efficient winding up of estates and trust administration.',
+    icon: BookOpen,
+    href: '/services/estates',
+  },
+  {
+    title: 'Property Law',
+    description: 'Conveyancing, property transfers, and lease agreement management.',
+    icon: Home,
+    href: '/services/property',
+  },
+  {
+    title: 'Commercial Law',
+    description: 'Comprehensive legal solutions for businesses, contracts, and corporate governance.',
+    icon: Briefcase,
+    href: '/services/commercial',
+  },
+  {
+    title: 'Medical Negligence',
+    description: 'Fighting for justice in cases of medical malpractice and professional negligence.',
+    icon: Scale,
+    href: '/services/medical-negligence',
+  },
+];
 
+export default function HomePage() {
   return (
     <div className="flex flex-col gap-20 pb-20">
       {/* Hero Section */}
@@ -112,7 +113,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
+          {SERVICES.map((service, index) => (
             <StitchCard
               key={service.title}
               {...service}
