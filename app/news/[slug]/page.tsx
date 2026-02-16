@@ -47,6 +47,11 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
             {/* Article Content */}
             <div className="container mx-auto px-6 max-w-4xl py-12">
+                {/*
+                  SENTINEL: Content is currently static in lib/news.ts.
+                  If this data source becomes dynamic (e.g., from a CMS or API),
+                  HTML sanitization (e.g., DOMPurify) MUST be implemented here.
+                */}
                 <div
                     className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-gray-300 prose-a:text-accent prose-strong:text-white"
                     dangerouslySetInnerHTML={{ __html: article.content }}
