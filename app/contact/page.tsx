@@ -1,9 +1,11 @@
 'use client';
 
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { useState } from 'react';
+import { Mail, Phone, MapPin, Send, CheckCircle, Loader2 } from 'lucide-react';
 import PageHero from '@/components/ui/PageHero';
 
 export default function ContactPage() {
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
     return (
         <div className="pb-20">
             <PageHero
@@ -61,38 +63,42 @@ export default function ContactPage() {
                     </div>
 
                     {/* Contact Form */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label htmlFor="name" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Name</label>
-                                    <input type="text" id="name" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="John Doe" />
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm min-h-[500px] flex flex-col justify-center">
+                        {status === 'success' ? (
+                            <div className="text-center py-8" role="status">
+                                <CheckCircle className="w-16 h-16 text-accent mx-auto mb-4" />
+                                <h3 className="text-2xl font-bold text-white mb-2">Thank You!</h3>
+                                <p className="text-gray-300 mb-6">Your message has been sent successfully.</p>
+                                <button onClick={() => setStatus('idle')} className="text-accent hover:underline font-bold uppercase tracking-wider text-sm">Send Another Message</button>
+                            </div>
+                        ) : (
+                            <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); setStatus('submitting'); setTimeout(() => setStatus('success'), 1500); }}>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {['name', 'email'].map(f => (
+                                        <div key={f} className="space-y-2">
+                                            <label htmlFor={f} className="text-sm font-bold text-gray-300 uppercase tracking-wide">{f}</label>
+                                            <input type={f === 'email' ? 'email' : 'text'} id={f} required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors disabled:opacity-50" placeholder={f === 'email' ? 'john@example.com' : 'John Doe'} />
+                                        </div>
+                                    ))}
                                 </div>
                                 <div className="space-y-2">
-                                    <label htmlFor="email" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Email</label>
-                                    <input type="email" id="email" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="john@example.com" />
+                                    <label htmlFor="subject" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Subject</label>
+                                    <select id="subject" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors disabled:opacity-50">
+                                        <option value="general">General Inquiry</option>
+                                        <option value="consultation">Request Consultation</option>
+                                        <option value="consumer">Consumer Matter</option>
+                                        <option value="mva">MVA Claim</option>
+                                    </select>
                                 </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="subject" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Subject</label>
-                                <select id="subject" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors">
-                                    <option value="general">General Inquiry</option>
-                                    <option value="consultation">Request Consultation</option>
-                                    <option value="consumer">Consumer Matter</option>
-                                    <option value="mva">MVA Claim</option>
-                                </select>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="message" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Message</label>
-                                <textarea id="message" rows={5} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="How can we help you?"></textarea>
-                            </div>
-
-                            <button type="button" className="w-full bg-gradient-to-r from-accent to-yellow-600 text-white font-bold py-4 rounded-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 uppercase tracking-wide flex items-center justify-center gap-2">
-                                Send Message <Send className="w-5 h-5" />
-                            </button>
-                        </form>
+                                <div className="space-y-2">
+                                    <label htmlFor="message" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Message</label>
+                                    <textarea id="message" rows={5} required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors disabled:opacity-50" placeholder="How can we help you?"></textarea>
+                                </div>
+                                <button type="submit" disabled={status === 'submitting'} className="w-full bg-gradient-to-r from-accent to-yellow-600 text-white font-bold py-4 rounded-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 uppercase tracking-wide flex items-center justify-center gap-2 disabled:opacity-70">
+                                    {status === 'submitting' ? <Loader2 className="w-5 h-5 animate-spin" /> : <>Send Message <Send className="w-5 h-5" /></>}
+                                </button>
+                            </form>
+                        )}
                     </div>
                 </div>
 
