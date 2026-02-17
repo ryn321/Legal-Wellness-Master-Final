@@ -1,0 +1,3 @@
+## 2025-05-14 - [GPU Optimization for Three.js Components]
+**Learning:** For React Three Fiber (R3F) components, optimize GPU usage by toggling the `frameloop` prop between 'always' and 'never' based on component visibility; initialize visibility state to `true` and use a native `IntersectionObserver` within a `useEffect` hook to ensure the GPU remains idle until the component is in view while maintaining initial render performance. Capping `dpr` to `[1, 2]` also significantly improves performance on high-DPI screens without visual regression.
+**Action:** Always implement IntersectionObserver for full-screen or persistent 3D scenes in Next.js to preserve battery and CPU/GPU resources when the scene is scrolled out of view.
