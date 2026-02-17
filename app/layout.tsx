@@ -30,8 +30,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-6 focus:py-3 focus:bg-accent focus:text-primary focus:rounded-full focus:font-bold focus:shadow-2xl focus:outline-none focus:ring-2 focus:ring-white transition-all"
+        >
+          Skip to content
+        </a>
         <Navbar />
-        <main className="flex-grow pt-20">
+        <main id="main-content" tabIndex={-1} className="flex-grow pt-20 outline-none">
           {children}
         </main>
         <Footer />
