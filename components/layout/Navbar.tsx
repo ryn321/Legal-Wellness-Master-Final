@@ -2,11 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Scale, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
 
     const navLinks = [
         { name: 'Home', href: '/' },
@@ -14,10 +17,10 @@ const Navbar = () => {
         { name: 'Services', href: '/services' },
         { name: 'Membership', href: '/membership' },
         { name: 'Insights', href: '/news' },
-        { name: 'Contact', href: '/contact' },
     ];
 
     const toggleMenu = () => setIsOpen(!isOpen);
+    const isActive = (h: string) => h === '/' ? pathname === '/' : pathname?.startsWith(h);
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-primary/80 backdrop-blur-md border-b border-white/10">
@@ -38,15 +41,15 @@ const Navbar = () => {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-white/80 hover:text-accent font-medium transition-colors text-sm uppercase tracking-wider relative group"
+                            className={cn("text-white/80 hover:text-accent font-medium transition-colors text-sm uppercase tracking-wider relative group", isActive(link.href) && "text-accent")}
                         >
                             {link.name}
-                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
+                            <span className={cn("absolute -bottom-1 left-0 h-0.5 bg-accent transition-all group-hover:w-full", isActive(link.href) ? "w-full" : "w-0")} />
                         </Link>
                     ))}
                     <Link
                         href="/contact"
-                        className="px-6 py-2 bg-transparent border border-accent text-accent hover:bg-accent hover:text-primary transition-all duration-300 rounded-full text-sm font-bold uppercase tracking-wider"
+                        className={cn("px-6 py-2 border border-accent transition-all duration-300 rounded-full text-sm font-bold uppercase tracking-wider", isActive('/contact') ? "bg-accent text-primary" : "bg-transparent text-accent hover:bg-accent hover:text-primary")}
                     >
                         Get in Touch
                     </Link>
@@ -57,7 +60,9 @@ const Navbar = () => {
                     <button
                         onClick={toggleMenu}
                         className="p-2 text-white hover:text-accent transition-colors"
-                        aria-label="Toggle Menu"
+                        aria-label={isOpen ? "Close Menu" : "Open Menu"}
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-menu"
                     >
                         {isOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
                     </button>
@@ -68,6 +73,7 @@ const Navbar = () => {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
+                        id="mobile-menu"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: '100vh' }}
                         exit={{ opacity: 0, height: 0 }}
@@ -85,7 +91,7 @@ const Navbar = () => {
                                     <Link
                                         href={link.href}
                                         onClick={() => setIsOpen(false)}
-                                        className="text-2xl font-bold text-white hover:text-accent transition-colors uppercase tracking-widest py-2 px-4 block"
+                                        className={cn("text-2xl font-bold transition-colors uppercase tracking-widest py-2 px-4 block", isActive(link.href) ? "text-accent" : "text-white hover:text-accent")}
                                     >
                                         {link.name}
                                     </Link>
@@ -99,7 +105,7 @@ const Navbar = () => {
                                 <Link
                                     href="/contact"
                                     onClick={() => setIsOpen(false)}
-                                    className="mt-4 px-10 py-4 bg-accent text-primary font-bold rounded-full uppercase tracking-wider text-lg shadow-lg block"
+                                    className={cn("mt-4 px-10 py-4 font-bold rounded-full uppercase tracking-wider text-lg shadow-lg block", isActive('/contact') ? "bg-white text-primary" : "bg-accent text-primary")}
                                 >
                                     Get in Touch
                                 </Link>
