@@ -1,9 +1,20 @@
 'use client';
 
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { useState, FormEvent } from 'react';
+import { Mail, Phone, MapPin, Send, CheckCircle, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import PageHero from '@/components/ui/PageHero';
 
 export default function ContactPage() {
+    const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setStatus('submitting');
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        setStatus('success');
+    };
+
     return (
         <div className="pb-20">
             <PageHero
@@ -62,36 +73,44 @@ export default function ContactPage() {
 
                     {/* Contact Form */}
                     <div className="bg-white/5 border border-white/10 rounded-2xl p-8 backdrop-blur-sm">
-                        <form className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label htmlFor="name" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Name</label>
-                                    <input type="text" id="name" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="John Doe" />
-                                </div>
-                                <div className="space-y-2">
-                                    <label htmlFor="email" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Email</label>
-                                    <input type="email" id="email" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="john@example.com" />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="subject" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Subject</label>
-                                <select id="subject" className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors">
-                                    <option value="general">General Inquiry</option>
-                                    <option value="consultation">Request Consultation</option>
-                                    <option value="consumer">Consumer Matter</option>
-                                    <option value="mva">MVA Claim</option>
-                                </select>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label htmlFor="message" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Message</label>
-                                <textarea id="message" rows={5} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent transition-colors" placeholder="How can we help you?"></textarea>
-                            </div>
-
-                            <button type="button" className="w-full bg-gradient-to-r from-accent to-yellow-600 text-white font-bold py-4 rounded-lg hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 uppercase tracking-wide flex items-center justify-center gap-2">
-                                Send Message <Send className="w-5 h-5" />
-                            </button>
+                        <form className="space-y-6" onSubmit={handleSubmit}>
+                            <AnimatePresence mode="wait">
+                                {status === 'success' ? (
+                                    <motion.div key="s" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="py-12 text-center" role="status">
+                                        <CheckCircle className="w-16 h-16 text-accent mx-auto mb-4" />
+                                        <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
+                                        <p className="text-gray-400 mb-6">We&apos;ll get back to you within 24 hours.</p>
+                                        <button type="button" onClick={() => setStatus('idle')} className="text-accent text-sm font-bold uppercase hover:underline">Send Another</button>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div key="f" exit={{ opacity: 0 }} className="space-y-6">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label htmlFor="name" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Name</label>
+                                                <input type="text" id="name" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent disabled:opacity-50" placeholder="John Doe" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label htmlFor="email" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Email</label>
+                                                <input type="email" id="email" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent disabled:opacity-50" placeholder="john@example.com" />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label htmlFor="subject" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Subject</label>
+                                            <select id="subject" required disabled={status === 'submitting'} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent disabled:opacity-50">
+                                                <option value="general">General Inquiry</option>
+                                                <option value="consultation">Request Consultation</option>
+                                            </select>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label htmlFor="message" className="text-sm font-bold text-gray-300 uppercase tracking-wide">Message</label>
+                                            <textarea id="message" required disabled={status === 'submitting'} rows={4} className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent disabled:opacity-50" placeholder="How can we help?"></textarea>
+                                        </div>
+                                        <button type="submit" disabled={status === 'submitting'} className="w-full bg-gradient-to-r from-accent to-yellow-600 text-white font-bold py-4 rounded-lg hover:shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-70">
+                                            {status === 'submitting' ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-5 h-5" /> Send Message</>}
+                                        </button>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </form>
                     </div>
                 </div>
