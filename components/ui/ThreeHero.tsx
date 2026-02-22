@@ -1,4 +1,4 @@
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial, Float } from '@react-three/drei';
 // @ts-expect-error - maath types may not be fully resolved in this environment
@@ -6,7 +6,11 @@ import * as random from 'maath/random/dist/maath-random.esm';
 import Image from 'next/image';
 import * as THREE from 'three';
 
-function GoldenParticles(props: Record<string, unknown>) {
+/**
+ * Optimized GoldenParticles component
+ * Wrapped in React.memo to prevent unnecessary re-renders of the particle system
+ */
+const GoldenParticles = React.memo(function GoldenParticles(props: Record<string, unknown>) {
     const ref = useRef<THREE.Points>(null);
     const sphere = useMemo(() => random.inSphere(new Float32Array(5001), { radius: 1.5 }), []);
 
@@ -30,13 +34,29 @@ function GoldenParticles(props: Record<string, unknown>) {
             </Points>
         </group>
     );
-}
-
-
+});
 
 export default function ThreeHero() {
+    const [isVisible, setIsVisible] = useState(true);
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                setIsVisible(entry.isIntersecting);
+            },
+            { threshold: 0 }
+        );
+
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
-        <div className="absolute inset-0 z-0 bg-primary">
+        <div ref={containerRef} className="absolute inset-0 z-0 bg-primary">
             {/* Background Image Layer - Preserving the user's approved image */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#061037] via-[#0a1a5c] to-[#040b29]" />
@@ -52,7 +72,16 @@ export default function ThreeHero() {
             </div>
 
             <div className="absolute inset-0 z-10 w-full h-full opacity-80">
-                <Canvas camera={{ position: [0, 0, 1] }}>
+                {/*
+                    Performance Optimization:
+                    1. frameloop toggles based on visibility to save GPU/Battery when out of view
+                    2. dpr capped at [1, 2] to prevent performance degradation on ultra-high DPI screens
+                */}
+                <Canvas
+                    camera={{ position: [0, 0, 1] }}
+                    frameloop={isVisible ? 'always' : 'never'}
+                    dpr={[1, 2]}
+                >
                     <Float speed={1} rotationIntensity={0.5} floatIntensity={0.5}>
                         <GoldenParticles />
                     </Float>
