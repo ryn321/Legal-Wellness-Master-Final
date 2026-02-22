@@ -47,6 +47,13 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
             {/* Article Content */}
             <div className="container mx-auto px-6 max-w-4xl py-12">
+                {/*
+                  SENTINEL SECURITY WARNING:
+                  We are using dangerouslySetInnerHTML for article content.
+                  Currently, this data is static and trusted (from lib/news.ts).
+                  If this source becomes dynamic or user-generated, HTML sanitization
+                  (e.g., using DOMPurify) MUST be implemented to prevent XSS.
+                */}
                 <div
                     className="prose prose-invert prose-lg max-w-none prose-headings:text-white prose-p:text-gray-300 prose-a:text-accent prose-strong:text-white"
                     dangerouslySetInnerHTML={{ __html: article.content }}
