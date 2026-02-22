@@ -1,0 +1,3 @@
+## 2025-05-15 - React Three Fiber Frameloop Optimization
+**Learning:** React Three Fiber (R3F) Canvas components run a continuous animation loop by default, which can consume significant GPU and battery resources even when the component is not visible on the screen. Additionally, high-resolution displays can cause performance degradation if the Device Pixel Ratio (DPR) is not capped.
+**Action:** Use `IntersectionObserver` to toggle the `Canvas` `frameloop` prop between `'always'` and `'never'` based on visibility. Cap `dpr` to `[1, 2]` to maintain performance on high-DPI screens without sacrificing visual quality. Use `React.memo` for complex R3F child components to avoid React reconciliation overhead during parent re-renders.
