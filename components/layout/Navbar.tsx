@@ -2,11 +2,17 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Scale, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
+
+    const isActive = (href: string) =>
+        pathname === href || (href !== '/' && pathname?.startsWith(href + '/'));
 
     const navLinks = [
         { name: 'Home', href: '/' },
@@ -38,10 +44,16 @@ const Navbar = () => {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-white/80 hover:text-accent font-medium transition-colors text-sm uppercase tracking-wider relative group"
+                            className={cn(
+                                "text-white/80 hover:text-accent font-medium transition-colors text-sm uppercase tracking-wider relative group",
+                                isActive(link.href) && "text-accent"
+                            )}
                         >
                             {link.name}
-                            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent transition-all group-hover:w-full" />
+                            <span className={cn(
+                                "absolute -bottom-1 left-0 h-0.5 bg-accent transition-all group-hover:w-full",
+                                isActive(link.href) ? "w-full" : "w-0"
+                            )} />
                         </Link>
                     ))}
                     <Link
@@ -58,6 +70,8 @@ const Navbar = () => {
                         onClick={toggleMenu}
                         className="p-2 text-white hover:text-accent transition-colors"
                         aria-label="Toggle Menu"
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-menu"
                     >
                         {isOpen ? <X className="w-8 h-8" /> : <Menu className="w-8 h-8" />}
                     </button>
@@ -68,6 +82,10 @@ const Navbar = () => {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
+                        id="mobile-menu"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Navigation Menu"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: '100vh' }}
                         exit={{ opacity: 0, height: 0 }}
@@ -85,7 +103,10 @@ const Navbar = () => {
                                     <Link
                                         href={link.href}
                                         onClick={() => setIsOpen(false)}
-                                        className="text-2xl font-bold text-white hover:text-accent transition-colors uppercase tracking-widest py-2 px-4 block"
+                                        className={cn(
+                                            "text-2xl font-bold text-white hover:text-accent transition-colors uppercase tracking-widest py-2 px-4 block",
+                                            isActive(link.href) && "text-accent"
+                                        )}
                                     >
                                         {link.name}
                                     </Link>
